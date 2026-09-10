@@ -925,7 +925,29 @@ body.light-theme .grid-overlay {
 .primary-btn.full-width { width: 100%; margin-top: 10px; }
 .field-hint { font-size: 0.76rem; color: var(--text-muted); }
 .label-row { display: flex; justify-content: space-between; align-items: center; }
-.custom-select { background: var(--input-bg); border: 1px solid var(--card-border); padding: 10px 14px; border-radius: 12px; color: #fff; font-size: 0.86rem; outline: none; }
+.custom-select {
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 0.86rem;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+select option, .custom-select option {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 10px;
+}
+
+body.light-theme select option,
+body.light-theme .custom-select option {
+    background-color: #ffffff;
+    color: #0f172a;
+}
 
 /* Floating Chatbot Widget */
 .chatbot-toggler {
