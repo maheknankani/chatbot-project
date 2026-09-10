@@ -138,6 +138,15 @@ const generateResponse = (incomingChatLI) => {
     const messageElement = incomingChatLI.querySelector("p");
     const selectedModel = modelSelect ? modelSelect.value : "gemini-3.6-flash";
     const cleanKey = API_KEY.trim();
+
+    // Friendly validation check if API key is not configured yet
+    if (!cleanKey || cleanKey === "YOUR_GEMINI_API_KEY" || cleanKey.length < 10) {
+        messageElement.classList.add("error");
+        messageElement.innerHTML = `🔑 <strong>API Key Required</strong><br>Please enter your <strong>Google Gemini API Key</strong> or <strong>OpenAI Key</strong> under <strong>Settings ⚙️</strong> in the sidebar to enable live AI responses.<br><br><button class="small-btn" onclick="switchView('settings')" style="margin-top:6px;"><span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;">settings</span> Open Settings</button>`;
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+        return;
+    }
+
     const isOpenAI = cleanKey.startsWith("sk-") || selectedModel.includes("gpt");
     
     let API_URL, requestOptions;
@@ -172,7 +181,7 @@ const generateResponse = (incomingChatLI) => {
     fetch(API_URL, requestOptions).then(res => {
         if (!res.ok) {
             return res.json().then(errData => {
-                throw new Error(errData.error?.message || "API request failed");
+                throw new Error(errData.error?.message || "API request failed. Please check your API key.");
             });
         }
         return res.json();
@@ -184,7 +193,7 @@ const generateResponse = (incomingChatLI) => {
         }
     }).catch((error) => {
         messageElement.classList.add("error");
-        messageElement.textContent = error.message || "Oops! Something went wrong. Please try again.";
+        messageElement.textContent = error.message || "Oops! Something went wrong. Please check your API Key in Settings.";
     }).finally(() => chatbox.scrollTo(0, chatbox.scrollHeight));    
 };
 
