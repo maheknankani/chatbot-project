@@ -149,6 +149,32 @@ body.light-theme .grid-overlay {
 
 .brand {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-close-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.sidebar-close-btn span {
+    font-size: 1.1rem;
 }
 
 .brand h2 {
@@ -1093,7 +1119,7 @@ body.light-theme .grid-overlay {
 
 /* Tablet & Mobile (<= 860px) */
 @media (max-width: 860px) {
-    .mobile-menu-btn {
+    .mobile-menu-btn, .sidebar-close-btn {
         display: flex;
     }
 

@@ -246,6 +246,7 @@ window.sendQuickPrompt = (promptText) => {
 
 // Mobile Sidebar Toggle
 const mobileMenuBtn = document.querySelector("#mobile-menu-btn");
+const sidebarCloseBtn = document.querySelector("#sidebar-close-btn");
 const sidebar = document.querySelector("#sidebar");
 const sidebarOverlay = document.querySelector("#sidebar-overlay");
 
@@ -259,6 +260,10 @@ if (mobileMenuBtn) {
         if (sidebar) sidebar.classList.toggle("show-mobile");
         if (sidebarOverlay) sidebarOverlay.classList.toggle("show-mobile");
     });
+}
+
+if (sidebarCloseBtn) {
+    sidebarCloseBtn.addEventListener("click", closeMobileSidebar);
 }
 
 if (sidebarOverlay) {
