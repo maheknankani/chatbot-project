@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaAI - Workflow Engine</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    
+    <!-- Chart.js for Real-Time Interactive Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="script.js" defer></script>
+</head>
+<body class="show-chatbot dark-theme">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Main Container -->
+    <div class="dashboard-container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h2><span class="material-symbols-outlined brand-icon">neurology</span> NovaAI <span class="version-tag">v2.5</span></h2>
+            </div>
+
+            <button class="new-chat-btn" onclick="startNewChat()">
+                <span class="material-symbols-outlined">add</span> New chat
+            </button>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <span class="material-symbols-outlined">grid_view</span> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-view="history">
+                    <span class="material-symbols-outlined">chat_bubble_outline</span> Chat history
+                </a>
+                <a href="#" class="nav-item" data-view="analytics">
+                    <span class="material-symbols-outlined">equalizer</span> Analytics
+                </a>
+                <a href="#" class="nav-item" data-view="plugins">
+                    <span class="material-symbols-outlined">extension</span> Plugins
+                </a>
+                <a href="#" class="nav-item" data-view="settings">
+                    <span class="material-symbols-outlined">settings</span> Settings
+                </a>
+            </nav>
+
+            <div class="recent-chats">
+                <span class="section-label">RECENT</span>
+                <div class="chat-history-list">
+                    <div class="history-item" onclick="sendQuickPrompt('Explain quantum computing')">Quantum computing</div>
+                    <div class="history-item" onclick="sendQuickPrompt('Write a clean JavaScript debounce function')">JS debounce function</div>
+                    <div class="history-item" onclick="sendQuickPrompt('Startup ideas for 2026')">Tech startup ideas</div>
+                </div>
+            </div>
+
+            <div class="user-profile">
+                <div class="avatar-square">
+                    <span class="material-symbols-outlined">person</span>
+                </div>
+                <div class="user-info">
+                    <span class="name">Pro Developer</span>
+                    <span class="status"><span class="dot"></span> Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Top Header Bar -->
+            <header class="top-bar">
+                <div class="search-bar">
+                    <span class="material-symbols-outlined">search</span>
+                    <input type="text" id="prompt-search" placeholder="Search prompts, models, commands...">
+                </div>
+
+                <div class="top-actions">
+                    <div class="model-dropdown">
+                        <select id="model-select">
+                            <option value="gemini-3.6-flash" selected>GEMINI-3.6-FLASH</option>
+                            <option value="gpt-4o-mini">GPT-4O-MINI</option>
+                            <option value="gemini-2.5-flash">GEMINI-2.5-FLASH</option>
+                        </select>
+                        <span class="material-symbols-outlined arrow">arrow_drop_down</span>
+                    </div>
+
+                    <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme">
+                        <span class="material-symbols-outlined">wb_sunny</span>
+                    </button>
+                    <button class="icon-btn" title="Notifications" onclick="showToast('No new notifications')">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- VIEW 1: DASHBOARD (WORKFLOW ENGINE) -->
+            <div id="view-dashboard" class="content-view active">
+                
+                <div class="view-title-row">
+                    <div>
+                        <h1>Workflow engine</h1>
+                        <p class="view-subtitle">Ultra-fast Gemini 3.6 Flash backend. Ask questions, generate code, or run a template below.</p>
+                    </div>
+                    <div class="engine-badge">
+                        <span class="dot-active"></span> ENGINE ACTIVE
+                    </div>
+                </div>
+
+                <!-- Metrics Dashboard Panel -->
+                <div class="metrics-panel">
+                    <!-- Left: Response Latency Box with Real Mini Canvas Chart -->
+                    <div class="metric-box latency-box">
+                        <div class="metric-header-row">
+                            <span class="metric-label"><span class="material-symbols-outlined title-icon">speed</span> Response latency</span>
+                            <span class="badge-live">LIVE</span>
+                        </div>
+                        <div class="metric-value-row">
+                            <span class="huge-number" id="live-latency-val">0.28</span>
+                            <span class="sub-stat"><span class="highlight-orange">SEC</span> · 14% faster than last week</span>
+                        </div>
+                        <!-- Real Chart Canvas -->
+                        <div class="sparkline-canvas-container">
+                            <canvas id="dashboardLatencyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Right: Table Stats Box -->
+                    <div class="metric-box stats-table-box">
+                        <div class="table-row">
+                            <span class="row-label"><span class="material-symbols-outlined title-icon">memory</span> Tokens processed</span>
+                            <span class="row-val bold" id="live-token-val">4,820</span>
+                        </div>
+                        <div class="table-row">
+                            <span class="row-label"><span class="material-symbols-outlined title-icon">verified_user</span> API health</span>
+                            <span class="row-val green">100%</span>
+                        </div>
+                        <div class="table-row">
+                            <span class="row-label"><span class="material-symbols-outlined title-icon">lock</span> Session</span>
+                            <span class="row-val green">Encrypted</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real Interactive Performance Graph Card -->
+                <div class="compact-card chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3><span class="material-symbols-outlined title-icon">show_chart</span> System Performance & API Requests</h3>
+                            <p class="view-subtitle">Real-time breakdown of API throughput and latency metrics</p>
+                        </div>
+                        <div class="chart-filters">
+                            <button class="filter-btn active" onclick="updateChartRange('1h', this)">1H</button>
+                            <button class="filter-btn" onclick="updateChartRange('24h', this)">24H</button>
+                            <button class="filter-btn" onclick="updateChartRange('7d', this)">7D</button>
+                            <button class="filter-btn" onclick="updateChartRange('30d', this)">30D</button>
+                        </div>
+                    </div>
+                    <div class="main-chart-container">
+                        <canvas id="dashboardMainChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Quick Starter Templates List -->
+                <div class="templates-header">
+                    <h3>Quick starter templates</h3>
+                    <span class="hint">Click any row to run</span>
+                </div>
+
+                <div class="templates-list">
+                    <div class="template-row" onclick="sendQuickPrompt('Explain quantum computing in simple terms with a real-world analogy')">
+                        <div class="template-icon icon-purple">
+                            <span class="material-symbols-outlined">science</span>
+                        </div>
+                        <div class="template-text">
+                            <h4>Quantum computing</h4>
+                            <p>Explain complex physics with simple real-world analogies</p>
+                        </div>
+                        <span class="tag">SCIENCE</span>
+                    </div>
+
+                    <div class="template-row" onclick="sendQuickPrompt('Write an optimized JavaScript function for debounce and throttle with comments')">
+                        <div class="template-icon icon-blue">
+                            <span class="material-symbols-outlined">code</span>
+                        </div>
+                        <div class="template-text">
+                            <h4>JavaScript helper</h4>
+                            <p>Generate clean, modular code snippets with documentation</p>
+                        </div>
+                        <span class="tag">CODING</span>
+                    </div>
+
+                    <div class="template-row" onclick="sendQuickPrompt('Give me 5 innovative AI startup business ideas for 2026 with monetization strategy')">
+                        <div class="template-icon icon-orange">
+                            <span class="material-symbols-outlined">lightbulb</span>
+                        </div>
+                        <div class="template-text">
+                            <h4>Startup ideas</h4>
+                            <p>Brainstorm innovative tech products & revenue models</p>
+                        </div>
+                        <span class="tag">BUSINESS</span>
+                    </div>
+
+                    <div class="template-row" onclick="sendQuickPrompt('Draft a polished professional email asking for a project deadline extension')">
+                        <div class="template-icon icon-green">
+                            <span class="material-symbols-outlined">mail</span>
+                        </div>
+                        <div class="template-text">
+                            <h4>Draft email</h4>
+                            <p>Compose professional business communications instantly</p>
+                        </div>
+                        <span class="tag">WORK</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- VIEW 2: CHAT HISTORY -->
+            <div id="view-history" class="content-view">
+                <div class="view-title-row">
+                    <div>
+                        <h1>Chat history</h1>
+                        <p class="view-subtitle">Review, resume, or export your past AI conversations</p>
+                    </div>
+                </div>
+
+                <div class="compact-card">
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th>Query Topic</th>
+                                <th>Model</th>
+                                <th>Tokens</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="bold"><span class="material-symbols-outlined table-icon">science</span> Quantum computing</span></td>
+                                <td><span class="pill">Gemini 3.6</span></td>
+                                <td>342</td>
+                                <td>Today, 1:04 PM</td>
+                                <td><button class="small-btn" onclick="sendQuickPrompt('Explain quantum computing')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="bold"><span class="material-symbols-outlined table-icon">code</span> JS debounce function</span></td>
+                                <td><span class="pill">Gemini 3.6</span></td>
+                                <td>512</td>
+                                <td>Today, 12:45 PM</td>
+                                <td><button class="small-btn" onclick="sendQuickPrompt('Write a clean JavaScript debounce function')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="bold"><span class="material-symbols-outlined table-icon">lightbulb</span> Tech startup ideas</span></td>
+                                <td><span class="pill">GPT-4o Mini</span></td>
+                                <td>890</td>
+                                <td>Yesterday, 4:20 PM</td>
+                                <td><button class="small-btn" onclick="sendQuickPrompt('Startup ideas for 2026')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- VIEW 3: ANALYTICS -->
+            <div id="view-analytics" class="content-view">
+                <div class="view-title-row">
+                    <div>
+                        <h1>Analytics</h1>
+                        <p class="view-subtitle">Monitor token consumption, response latency, and system health</p>
+                    </div>
+                </div>
+
+                <div class="grid-2col">
+                    <div class="compact-card">
+                        <h3><span class="material-symbols-outlined title-icon">bar_chart</span> Daily Token Usage</h3>
+                        <div class="analytics-chart-container">
+                            <canvas id="analyticsTokenChart"></canvas>
+                        </div>
+                        <div class="progress-info" style="margin-top:12px;">
+                            <span>48,290 / 100,000 quota</span>
+                            <span class="green">48% consumed</span>
+                        </div>
+                    </div>
+
+                    <div class="compact-card">
+                        <h3><span class="material-symbols-outlined title-icon">pie_chart</span> Request Distribution</h3>
+                        <div class="analytics-chart-container doughnut-container">
+                            <canvas id="analyticsDistChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 4: PLUGINS -->
+            <div id="view-plugins" class="content-view">
+                <div class="view-title-row">
+                    <div>
+                        <h1>Plugins & Extensions</h1>
+                        <p class="view-subtitle">Enable extra capabilities for your workflow engine</p>
+                    </div>
+                </div>
+
+                <div class="grid-2col">
+                    <div class="compact-card flex-row">
+                        <div class="plugin-info-block">
+                            <div class="plugin-icon-box icon-purple">
+                                <span class="material-symbols-outlined">travel_explore</span>
+                            </div>
+                            <div>
+                                <h4>Web search surfer</h4>
+                                <p class="view-subtitle">Enable live web search for real-time data.</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked onchange="togglePlugin('Web Search', this)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="compact-card flex-row">
+                        <div class="plugin-info-block">
+                            <div class="plugin-icon-box icon-blue">
+                                <span class="material-symbols-outlined">terminal</span>
+                            </div>
+                            <div>
+                                <h4>Code interpreter</h4>
+                                <p class="view-subtitle">Execute JS/Python snippets in sandbox.</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked onchange="togglePlugin('Code Interpreter', this)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="compact-card flex-row">
+                        <div class="plugin-info-block">
+                            <div class="plugin-icon-box icon-orange">
+                                <span class="material-symbols-outlined">palette</span>
+                            </div>
+                            <div>
+                                <h4>Image generator</h4>
+                                <p class="view-subtitle">Generate images from textual descriptions.</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" onchange="togglePlugin('Image Generator', this)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="compact-card flex-row">
+                        <div class="plugin-info-block">
+                            <div class="plugin-icon-box icon-green">
+                                <span class="material-symbols-outlined">description</span>
+                            </div>
+                            <div>
+                                <h4>Doc summarizer</h4>
+                                <p class="view-subtitle">Parse & summarize long document files.</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked onchange="togglePlugin('Doc Summarizer', this)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 5: SETTINGS -->
+            <div id="view-settings" class="content-view">
+                <div class="view-title-row">
+                    <div>
+                        <h1>System & Copilot Settings</h1>
+                        <p class="view-subtitle">Manage API keys, system persona prompts, and preferences</p>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="form-group">
+                        <label><span class="material-symbols-outlined input-icon">key</span> Active API Key (Google Gemini / OpenAI)</label>
+                        <div class="input-inline">
+                            <input type="password" id="api-key-input" placeholder="Enter your Gemini / OpenAI API Key..." value="">
+                            <button class="primary-btn" onclick="saveApiKey()">Save Key</button>
+                        </div>
+                        <span class="field-hint">Supports Google Gemini keys (`AIza...`) and OpenAI keys (`sk-...`).</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label><span class="material-symbols-outlined input-icon">psychology</span> Custom System Instruction Persona</label>
+                        <textarea id="system-prompt" rows="3">You are NovaAI, a helpful, precise, and fast AI assistant.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-row">
+                            <label><span class="material-symbols-outlined input-icon">thermostat</span> Model Creativity (Temperature)</label>
+                            <span id="temp-val" class="highlight-orange">0.7</span>
+                        </div>
+                        <input type="range" id="temp-slider" min="0" max="1" step="0.1" value="0.7" oninput="document.getElementById('temp-val').textContent = this.value">
+                    </div>
+
+                    <div class="form-group">
+                        <label><span class="material-symbols-outlined input-icon">language</span> Default Response Language</label>
+                        <select class="custom-select" id="language-select">
+                            <option value="en" selected>English (US)</option>
+                            <option value="es">Spanish (Español)</option>
+                            <option value="fr">French (Français)</option>
+                            <option value="de">German (Deutsch)</option>
+                        </select>
+                    </div>
+
+                    <button class="primary-btn full-width" onclick="saveAllSettings()">Save All Settings</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Floating Chatbot Toggler Button -->
+    <button class="chatbot-toggler" id="chatbot-toggler" title="Toggle AI Copilot">
+        <span class="material-symbols-outlined">chat_bubble</span>
+        <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <!-- Chatbot Window -->
+    <div class="chatbot" id="chatbot-window">
+        <header>
+            <div class="bot-header-title">
+                <span class="material-symbols-outlined header-icon">smart_toy</span>
+                <div>
+                    <h2>Nova Copilot</h2>
+                    <span class="online-indicator"><span class="tiny-dot"></span> <span id="header-model-name">Gemini 3.6 Flash</span></span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="header-action-btn" onclick="clearChatHistory()" title="Clear Conversation">
+                    <span class="material-symbols-outlined">delete_sweep</span>
+                </button>
+                
+            </div>
+        </header>
+
+        <ul class="chatbox" id="chatbox">
+            <li class="chat incoming">
+                <span class="material-symbols-outlined bot-avatar">smart_toy</span>
+                <div class="message-content">
+                    <p>Hello 👋 How can I help you today?</p>
+                </div>
+            </li>
+        </ul>
+
+        <div class="chat-input">
+            <textarea placeholder="Enter a message..." required></textarea>
+            <span id="send-btn" class="material-symbols-outlined" title="Send Message">send</span>
+        </div>
+    </div>
+</body>
+</html>
