@@ -24,9 +24,11 @@
 
     <!-- Main Container -->
     <div class="dashboard-container">
+        <!-- Sidebar Backdrop Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
         
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="brand">
                 <h2><span class="material-symbols-outlined brand-icon">neurology</span> NovaAI <span class="version-tag">v2.5</span></h2>
             </div>
@@ -78,6 +80,10 @@
             
             <!-- Top Header Bar -->
             <header class="top-bar">
+                <button class="icon-btn mobile-menu-btn" id="mobile-menu-btn" title="Toggle Navigation Menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+
                 <div class="search-bar">
                     <span class="material-symbols-outlined">search</span>
                     <input type="text" id="prompt-search" placeholder="Search prompts, models, commands...">
@@ -233,40 +239,42 @@
                 </div>
 
                 <div class="compact-card">
-                    <table class="compact-table">
-                        <thead>
-                            <tr>
-                                <th>Query Topic</th>
-                                <th>Model</th>
-                                <th>Tokens</th>
-                                <th>Date</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="bold"><span class="material-symbols-outlined table-icon">science</span> Quantum computing</span></td>
-                                <td><span class="pill">Gemini 3.6</span></td>
-                                <td>342</td>
-                                <td>Today, 1:04 PM</td>
-                                <td><button class="small-btn" onclick="sendQuickPrompt('Explain quantum computing')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
-                            </tr>
-                            <tr>
-                                <td><span class="bold"><span class="material-symbols-outlined table-icon">code</span> JS debounce function</span></td>
-                                <td><span class="pill">Gemini 3.6</span></td>
-                                <td>512</td>
-                                <td>Today, 12:45 PM</td>
-                                <td><button class="small-btn" onclick="sendQuickPrompt('Write a clean JavaScript debounce function')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
-                            </tr>
-                            <tr>
-                                <td><span class="bold"><span class="material-symbols-outlined table-icon">lightbulb</span> Tech startup ideas</span></td>
-                                <td><span class="pill">GPT-4o Mini</span></td>
-                                <td>890</td>
-                                <td>Yesterday, 4:20 PM</td>
-                                <td><button class="small-btn" onclick="sendQuickPrompt('Startup ideas for 2026')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="compact-table">
+                            <thead>
+                                <tr>
+                                    <th>Query Topic</th>
+                                    <th>Model</th>
+                                    <th>Tokens</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="bold"><span class="material-symbols-outlined table-icon">science</span> Quantum computing</span></td>
+                                    <td><span class="pill">Gemini 3.6</span></td>
+                                    <td>342</td>
+                                    <td>Today, 1:04 PM</td>
+                                    <td><button class="small-btn" onclick="sendQuickPrompt('Explain quantum computing')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="bold"><span class="material-symbols-outlined table-icon">code</span> JS debounce function</span></td>
+                                    <td><span class="pill">Gemini 3.6</span></td>
+                                    <td>512</td>
+                                    <td>Today, 12:45 PM</td>
+                                    <td><button class="small-btn" onclick="sendQuickPrompt('Write a clean JavaScript debounce function')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="bold"><span class="material-symbols-outlined table-icon">lightbulb</span> Tech startup ideas</span></td>
+                                    <td><span class="pill">GPT-4o Mini</span></td>
+                                    <td>890</td>
+                                    <td>Yesterday, 4:20 PM</td>
+                                    <td><button class="small-btn" onclick="sendQuickPrompt('Startup ideas for 2026')"><span class="material-symbols-outlined">play_arrow</span> Resume</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

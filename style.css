@@ -1061,4 +1061,163 @@ body.light-theme .grid-overlay {
 .chat-input span#send-btn { color: var(--accent-purple); font-size: 1.5rem; cursor: pointer; visibility: hidden; }
 .chat-input textarea:valid ~ span#send-btn { visibility: visible; }
 
-@media(max-width: 860px) { .sidebar { display: none; } .main-content { padding: 16px; } }
+/* Mobile Menu Button & Sidebar Backdrop */
+.mobile-menu-btn {
+    display: none;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.show-mobile {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Responsive Table Container */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ==================== Responsive Media Queries ==================== */
+
+/* Tablet & Mobile (<= 860px) */
+@media (max-width: 860px) {
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 250px;
+        height: 100vh;
+        z-index: 9999;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar.show-mobile {
+        left: 0;
+    }
+
+    .main-content {
+        padding: 16px 16px 100px 16px;
+    }
+
+    .top-bar {
+        gap: 10px;
+    }
+
+    .search-bar {
+        flex: 1;
+        width: auto;
+    }
+
+    .metrics-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-2col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile Screens (<= 640px) */
+@media (max-width: 640px) {
+    .top-bar {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .search-bar {
+        order: 3;
+        width: 100%;
+    }
+
+    .top-actions {
+        margin-left: auto;
+    }
+
+    .view-title-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .chart-filters {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .filter-btn {
+        flex: 1;
+        text-align: center;
+        padding: 6px 0;
+    }
+
+    .template-row {
+        padding: 12px 14px;
+        flex-wrap: wrap;
+    }
+
+    .tag {
+        margin-left: 0;
+        margin-top: 4px;
+    }
+
+    .chatbot {
+        width: calc(100vw - 24px);
+        right: 12px;
+        bottom: 80px;
+        height: calc(100vh - 110px);
+        max-height: 560px;
+    }
+
+    .settings-card {
+        padding: 18px;
+    }
+
+    .input-inline {
+        flex-direction: column;
+    }
+
+    .input-inline .primary-btn {
+        width: 100%;
+    }
+}
+
+/* Extra Small Screens (<= 400px) */
+@media (max-width: 400px) {
+    .huge-number {
+        font-size: 2.2rem;
+    }
+
+    .main-chart-container {
+        height: 180px;
+    }
+
+    .chatbot-toggler {
+        right: 16px;
+        bottom: 16px;
+        width: 50px;
+        height: 50px;
+    }
+}
+

@@ -244,6 +244,33 @@ window.sendQuickPrompt = (promptText) => {
     handleChat();
 };
 
+// Mobile Sidebar Toggle
+const mobileMenuBtn = document.querySelector("#mobile-menu-btn");
+const sidebar = document.querySelector("#sidebar");
+const sidebarOverlay = document.querySelector("#sidebar-overlay");
+
+const closeMobileSidebar = () => {
+    if (sidebar) sidebar.classList.remove("show-mobile");
+    if (sidebarOverlay) sidebarOverlay.classList.remove("show-mobile");
+};
+
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener("click", () => {
+        if (sidebar) sidebar.classList.toggle("show-mobile");
+        if (sidebarOverlay) sidebarOverlay.classList.toggle("show-mobile");
+    });
+}
+
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener("click", closeMobileSidebar);
+}
+
+// Close mobile sidebar on navigation click
+const mobileNavItems = document.querySelectorAll(".nav-item");
+mobileNavItems.forEach(item => {
+    item.addEventListener("click", closeMobileSidebar);
+});
+
 // Global Chart Instances
 let dashboardMainChart = null;
 let dashboardLatencyChart = null;
