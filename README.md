@@ -44,5 +44,6 @@
    - Go to **Settings** in the sidebar.
    - Enter your **Google Gemini Key** (`AIza...` / `AQ...`) or **OpenAI Key** (`sk-...`).
    - Click **Save Key**.
-
+ 3. **Live**
+     https://maheknankani.github.io/NovaAI-AI-Copilot-Platform/
 
