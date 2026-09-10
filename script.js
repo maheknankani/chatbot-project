@@ -8,8 +8,16 @@ const headerModelName = document.querySelector("#header-model-name");
 const themeToggleBtn = document.querySelector("#theme-toggle-btn");
 
 let userMessage;
-let API_KEY = "YOUR_GEMINI_API_KEY";
+let API_KEY = localStorage.getItem("nova_api_key") || "YOUR_GEMINI_API_KEY";
 const inputInitHeight = chatInput ? chatInput.scrollHeight : 38;
+
+// Populate saved API key input on load if available
+document.addEventListener("DOMContentLoaded", () => {
+    const keyInput = document.getElementById("api-key-input");
+    if (keyInput && localStorage.getItem("nova_api_key")) {
+        keyInput.value = localStorage.getItem("nova_api_key");
+    }
+});
 
 // Toast Notification
 window.showToast = (message) => {
@@ -64,7 +72,8 @@ window.saveApiKey = () => {
     const input = document.getElementById("api-key-input");
     if (input && input.value.trim()) {
         API_KEY = input.value.trim();
-        showToast("API key updated!");
+        localStorage.setItem("nova_api_key", API_KEY);
+        showToast("API key saved in browser!");
     } else {
         showToast("Enter a valid key.");
     }
@@ -72,7 +81,8 @@ window.saveApiKey = () => {
 
 // Save All Settings
 window.saveAllSettings = () => {
-    showToast("Settings saved!");
+    saveApiKey();
+    showToast("All settings saved!");
 };
 
 // Copy Text
