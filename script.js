@@ -317,6 +317,12 @@ const initCharts = () => {
     // 1. Dashboard Mini Latency Sparkline Chart
     const latencyCanvas = document.getElementById("dashboardLatencyChart");
     if (latencyCanvas) {
+        const existingLatencyChart = Chart.getChart(latencyCanvas);
+        if (existingLatencyChart) existingLatencyChart.destroy();
+        if (dashboardLatencyChart) {
+            try { dashboardLatencyChart.destroy(); } catch (e) {}
+        }
+
         const ctx = latencyCanvas.getContext("2d");
         const gradient = ctx.createLinearGradient(0, 0, 0, 80);
         gradient.addColorStop(0, "rgba(168, 85, 247, 0.4)");
@@ -349,6 +355,12 @@ const initCharts = () => {
     // 2. Dashboard Main Interactive Performance Chart
     const mainCanvas = document.getElementById("dashboardMainChart");
     if (mainCanvas) {
+        const existingMainChart = Chart.getChart(mainCanvas);
+        if (existingMainChart) existingMainChart.destroy();
+        if (dashboardMainChart) {
+            try { dashboardMainChart.destroy(); } catch (e) {}
+        }
+
         const ctx = mainCanvas.getContext("2d");
 
         const gradientPurple = ctx.createLinearGradient(0, 0, 0, 220);
@@ -433,6 +445,12 @@ const initCharts = () => {
     // 3. Analytics Token Bar Chart
     const tokenCanvas = document.getElementById("analyticsTokenChart");
     if (tokenCanvas) {
+        const existingTokenChart = Chart.getChart(tokenCanvas);
+        if (existingTokenChart) existingTokenChart.destroy();
+        if (analyticsTokenChart) {
+            try { analyticsTokenChart.destroy(); } catch (e) {}
+        }
+
         const ctx = tokenCanvas.getContext("2d");
         analyticsTokenChart = new Chart(ctx, {
             type: 'bar',
@@ -461,6 +479,12 @@ const initCharts = () => {
     // 4. Analytics Request Distribution Doughnut Chart
     const distCanvas = document.getElementById("analyticsDistChart");
     if (distCanvas) {
+        const existingDistChart = Chart.getChart(distCanvas);
+        if (existingDistChart) existingDistChart.destroy();
+        if (analyticsDistChart) {
+            try { analyticsDistChart.destroy(); } catch (e) {}
+        }
+
         const ctx = distCanvas.getContext("2d");
         analyticsDistChart = new Chart(ctx, {
             type: 'doughnut',
@@ -503,13 +527,13 @@ window.updateChartRange = (range, btnElement) => {
     }
 };
 
-// Event listener for chart init
-document.addEventListener("DOMContentLoaded", () => {
-    initCharts();
-});
-// Fallback if script loads after DOMContentLoaded
+// Safe Chart Initialization Trigger
 if (document.readyState === "complete" || document.readyState === "interactive") {
-    setTimeout(initCharts, 100);
+    setTimeout(initCharts, 50);
+} else {
+    document.addEventListener("DOMContentLoaded", () => {
+        initCharts();
+    });
 }
 
 // Dark / Light Theme Toggle Listener (Update Chart colors)
